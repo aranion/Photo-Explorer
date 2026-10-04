@@ -3,13 +3,9 @@ import { SearchInput } from '@/app/components/common/SearchInput'
 import { usePhotoData } from '@/app/providers/PhotoDataProvider/usePhotoData'
 import styles from './styles.module.css'
 import type { PhotoSearchPageProps } from './types'
+import { DownloadStatus } from '@/types/download'
 
-export const PhotoSearchPage = function({
-  title,
-  description,
-  search,
-  children
-}: PhotoSearchPageProps) {
+export const PhotoSearchPage = function ({ title, description, search, children }: PhotoSearchPageProps) {
   const { state, start, cancel } = usePhotoData()
 
   return (
@@ -23,7 +19,7 @@ export const PhotoSearchPage = function({
         value={search.term}
         onChange={search.onTermChange}
         resultSummary={search.resultSummary}
-        disabled={state.status !== 'success'}
+        disabled={state.status !== DownloadStatus.Success}
       />
       {children}
     </section>

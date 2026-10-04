@@ -3,22 +3,13 @@ import { CancelledError } from '@/api/CancelledError'
 import { fetchJsonWithProgress } from '@/api/fetchJsonWithProgress'
 import { ESTIMATED_PHOTOS_RESPONSE_BYTES } from '@/app/constants/api'
 import { createInitialDownloadState, downloadReducer } from '@/lib/downloadReducer'
-import type { DownloadState } from '@/types/download'
-import type { Photo } from '@/types/photo'
+import { DownloadActionType } from '@/types/download'
 import { buildPhotosUrl } from './buildPhotosUrl'
+import type { Photo } from '@/types/photo'
+import type { UsePhotoDownloadResult } from './types'
 
-export interface UsePhotoDownloadResult {
-  state: DownloadState<Photo[]>
-  start: () => void
-  cancel: () => void
-  reset: () => void
-}
-
-export const usePhotoDownload = function(): UsePhotoDownloadResult {
-  const [state, dispatch] = useReducer(
-    downloadReducer<Photo[]>,
-    createInitialDownloadState<Photo[]>()
-  )
+export const usePhotoDownload = function (): UsePhotoDownloadResult {
+  const [state, dispatch] = useReducer(downloadReducer<Photo[]>, createInitialDownloadState<Photo[]>())
   const abortControllerRef = useRef<AbortController | null>(null)
   const requestIdRef = useRef(0)
 
@@ -29,14 +20,14 @@ export const usePhotoDownload = function(): UsePhotoDownloadResult {
 
     const requestId = requestIdRef.current + 1
     requestIdRef.current = requestId
-    dispatch({ type: 'start' })
+    dispatch({ type: DownloadActionType.Start })
     dispatch({
-      type: 'progress',
+      type: DownloadActionType.Progress,
       progress: {
         receivedBytes: 0,
         totalBytes: ESTIMATED_PHOTOS_RESPONSE_BYTES,
-        percent: 0
-      }
+        percent: 0,
+      },
     })
 
     fetchJsonWithProgress<Photo[]>(buildPhotosUrl(), {
@@ -44,13 +35,13 @@ export const usePhotoDownload = function(): UsePhotoDownloadResult {
       expectedTotalBytes: ESTIMATED_PHOTOS_RESPONSE_BYTES,
       onProgress: (progress) => {
         if (requestIdRef.current === requestId) {
-          dispatch({ type: 'progress', progress })
+          dispatch({ type: DownloadActionType.Progress, progress })
         }
-      }
+      },
     })
       .then((data) => {
         if (requestIdRef.current === requestId) {
-          dispatch({ type: 'success', data })
+          dispatch({ type: DownloadActionType.Success, data })
         }
       })
       .catch((error: unknown) => {
@@ -58,12 +49,12 @@ export const usePhotoDownload = function(): UsePhotoDownloadResult {
           return
         }
         if (error instanceof CancelledError) {
-          dispatch({ type: 'cancel' })
+          dispatch({ type: DownloadActionType.Cancel })
           return
         }
         dispatch({
-          type: 'failure',
-          error: error instanceof Error ? error : new Error(String(error))
+          type: DownloadActionType.Failure,
+          error: error instanceof Error ? error : new Error(String(error)),
         })
       })
       .finally(() => {
@@ -77,14 +68,14 @@ export const usePhotoDownload = function(): UsePhotoDownloadResult {
     requestIdRef.current += 1
     abortControllerRef.current?.abort()
     abortControllerRef.current = null
-    dispatch({ type: 'cancel' })
+    dispatch({ type: DownloadActionType.Cancel })
   }, [])
 
   const reset = useCallback((): void => {
     requestIdRef.current += 1
     abortControllerRef.current?.abort()
     abortControllerRef.current = null
-    dispatch({ type: 'reset' })
+    dispatch({ type: DownloadActionType.Reset })
   }, [])
 
   useEffect(

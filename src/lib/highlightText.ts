@@ -16,8 +16,9 @@ export interface HighlightSegment {
  * @param query — поисковый запрос
  * @returns сегменты текста с признаком совпадения
  */
-export const highlightText = function(text: string, query: string): HighlightSegment[] {
+export const highlightText = function (text: string, query: string): HighlightSegment[] {
   const normalizedQuery = query.trim()
+
   if (normalizedQuery.length === 0) {
     return [{ text, isMatch: false }]
   }
@@ -37,7 +38,7 @@ export const highlightText = function(text: string, query: string): HighlightSeg
     }
     segments.push({
       text: text.slice(matchIndex, matchIndex + normalizedQuery.length),
-      isMatch: true
+      isMatch: true,
     })
     offset = matchIndex + normalizedQuery.length
   }

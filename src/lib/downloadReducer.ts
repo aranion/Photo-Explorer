@@ -1,4 +1,4 @@
-import type { DownloadAction, DownloadState } from '@/types/download'
+import { DownloadStatus, type DownloadAction, type DownloadState, DownloadActionType } from '@/types/download'
 
 /**
  * Создаёт начальное состояние загрузки.
@@ -6,8 +6,8 @@ import type { DownloadAction, DownloadState } from '@/types/download'
  * @typeParam TData — тип загружаемых данных
  * @returns состояние `idle` без данных и прогресса
  */
-export const createInitialDownloadState = function <TData>(): DownloadState<TData> {
-  return { status: 'idle' }
+export const createInitialDownloadState = <TData>(): DownloadState<TData> => {
+  return { status: DownloadStatus.Idle }
 }
 
 /**
@@ -21,25 +21,29 @@ export const createInitialDownloadState = function <TData>(): DownloadState<TDat
  * @param action — действие автомата
  * @returns новое состояние загрузки
  */
-export const downloadReducer = function <TData>(
-  state: DownloadState<TData>,
-  action: DownloadAction<TData>
-): DownloadState<TData> {
+export const downloadReducer = <TData>(state: DownloadState<TData>, action: DownloadAction<TData>): DownloadState<TData> => {
   switch (action.type) {
-    case 'start':
+    case DownloadActionType.Start:
       return {
-        status: 'loading',
-        progress: { receivedBytes: 0, totalBytes: null, percent: null }
+        status: DownloadStatus.Loading,
+        progress: { receivedBytes: 0, totalBytes: null, percent: null },
       }
-    case 'progress':
-      return state.status === 'loading' ? { ...state, progress: action.progress } : state
-    case 'success':
-      return { status: 'success', data: action.data }
-    case 'cancel':
-      return state.status === 'loading' ? { status: 'cancelled' } : state
-    case 'failure':
-      return { status: 'failure', error: action.error }
-    case 'reset':
-      return createInitialDownloadState()
+    case DownloadActionType.Progress:
+      return state.status === DownloadStatus.Loading ? { ...state, progress: action.progress } : state
+    case DownloadActionType.Success:
+      return { status: DownloadStatus.Success, data: action.data }
+    case DownloadActionType.Cancel:
+      return state.status === DownloadStatus.Loading ? { status: DownloadStatus.Cancelled } : state
+    case DownloadActionType.Failure:
+      return { status: DownloadStatus.Failure, error: action.error }
+    case DownloadActionType.Reset:
+      // Возвращаем начальное состояние, явно указывая дженерик,
+      // чтобы TS не потерял тип TData
+      return createInitialDownloadState<TData>()
+    // Защита от добавления новых action в будущем (Exhaustiveness check)
+    default: {
+      const _exhaustiveCheck: never = action
+      return _exhaustiveCheck
+    }
   }
 }

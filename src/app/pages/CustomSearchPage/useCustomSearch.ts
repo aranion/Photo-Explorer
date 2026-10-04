@@ -4,22 +4,13 @@ import { SEARCH_DEBOUNCE_MS } from '@/app/constants/search'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { filterByQuery } from '@/lib/filterByQuery'
 import type { Photo } from '@/types/photo'
+import type { UseCustomSearchResult } from './types'
 
-export interface UseCustomSearchResult {
-  searchTerm: string
-  setSearchTerm: (value: string) => void
-  debouncedSearchTerm: string
-  filteredPhotos: Photo[]
-}
-
-export const useCustomSearch = function(photos: Photo[]): UseCustomSearchResult {
+export const useCustomSearch = function (photos: Photo[]): UseCustomSearchResult {
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearchTerm = useDebouncedValue(searchTerm, SEARCH_DEBOUNCE_MS)
 
-  const filteredPhotos = useMemo(
-    () => filterByQuery(photos, debouncedSearchTerm, getPhotoSearchableValues),
-    [photos, debouncedSearchTerm]
-  )
+  const filteredPhotos = useMemo(() => filterByQuery(photos, debouncedSearchTerm, getPhotoSearchableValues), [photos, debouncedSearchTerm])
 
   return { searchTerm, setSearchTerm, debouncedSearchTerm, filteredPhotos }
 }

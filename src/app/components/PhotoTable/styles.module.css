@@ -4,7 +4,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #2f6f9f;
+  color: var(--color-primary-strong);;
   text-decoration: none;
 }
 

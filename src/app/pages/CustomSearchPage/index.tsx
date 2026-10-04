@@ -6,18 +6,16 @@ import { getPhotoTableEmptyMessage } from '@/app/components/PhotoTable/getPhotoT
 import { PhotoSearchPage } from '@/app/components/PhotoSearchPage'
 import { usePhotoData } from '@/app/providers/PhotoDataProvider/usePhotoData'
 import { useCustomSearch } from './useCustomSearch'
+import { DownloadStatus } from '@/types/download'
 
-export const CustomSearchPage = function() {
+export const CustomSearchPage = function () {
   const { state } = usePhotoData()
-  const photos = state.status === 'success' ? state.data : EMPTY_PHOTOS
-  const { searchTerm, setSearchTerm, debouncedSearchTerm, filteredPhotos } =
-    useCustomSearch(photos)
+  const photos = state.status === DownloadStatus.Success ? state.data : EMPTY_PHOTOS
+  const { searchTerm, setSearchTerm, debouncedSearchTerm, filteredPhotos } = useCustomSearch(photos)
 
   const meta = useMemo(() => ({ searchTerm: debouncedSearchTerm }), [debouncedSearchTerm])
   const hasSearchQuery = debouncedSearchTerm.trim().length > 0
-  const resultSummary = hasSearchQuery
-    ? `Найдено: ${filteredPhotos.length} из ${photos.length}`
-    : null
+  const resultSummary = hasSearchQuery ? `Найдено: ${filteredPhotos.length} из ${photos.length}` : null
 
   return (
     <PhotoSearchPage

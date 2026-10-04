@@ -8,8 +8,9 @@
  * @param query — поисковый запрос
  * @returns `true`, если найдено хотя бы одно совпадение
  */
-export const matchesAnyQuery = function(values: readonly string[], query: string): boolean {
+export const matchesAnyQuery = function (values: readonly string[], query: string): boolean {
   const normalizedQuery = query.trim().toLowerCase()
+
   if (normalizedQuery.length === 0) {
     return true
   }

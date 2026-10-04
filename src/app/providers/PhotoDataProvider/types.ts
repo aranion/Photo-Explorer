@@ -9,6 +9,8 @@ export interface PhotoDataContextValue {
   reset: () => void
 }
 
+export interface UsePhotoDownloadResult extends PhotoDataContextValue {}
+
 export interface PhotoDataProviderProps {
   children: ReactNode
 }

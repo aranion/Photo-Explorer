@@ -14,18 +14,20 @@ import { matchesAnyQuery } from './matchesQuery'
 export const createSearchableColumnsFilter = function <TData extends RowData>(): FilterFn<TData> {
   const filterFn: FilterFn<TData> = (row, _columnId, filterValue) => {
     const query = String(filterValue ?? '')
+
     if (query.trim().length === 0) {
       return true
     }
+
     const searchableValues = row
       .getAllCells()
       .filter((cell) => cell.column.columnDef.meta?.searchable === true)
       .map((cell) => String(cell.getValue() ?? ''))
+
     return matchesAnyQuery(searchableValues, query)
   }
 
-  filterFn.autoRemove = (filterValue: unknown) =>
-    String(filterValue ?? '').trim().length === 0
+  filterFn.autoRemove = (filterValue: unknown) => String(filterValue ?? '').trim().length === 0
 
   return filterFn
 }
