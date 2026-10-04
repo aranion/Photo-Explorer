@@ -1,0 +1,3 @@
+export const DEFAULT_ROW_HEIGHT_PX = 44
+export const DEFAULT_OVERSCAN_ROWS = 10
+export const DEFAULT_TABLE_HEIGHT_PX = 600

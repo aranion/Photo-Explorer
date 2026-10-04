@@ -1,0 +1,18 @@
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.progressText {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  color: #616e7c;
+}
+
+.error {
+  color: var(--color-danger-strong);
+}

@@ -1,0 +1,13 @@
+.urlLink {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #2f6f9f;
+  text-decoration: none;
+}
+
+.urlLink:hover {
+  text-decoration: underline;
+}
