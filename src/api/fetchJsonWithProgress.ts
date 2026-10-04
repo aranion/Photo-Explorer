@@ -52,7 +52,7 @@ export const fetchJsonWithProgress = async function <TData>(url: string, options
         onProgress?.({
           receivedBytes,
           totalBytes,
-          percent: toPercent(receivedBytes, totalBytes)
+          percent: toPercent(receivedBytes, totalBytes),
         })
       }
     } finally {
@@ -86,10 +86,9 @@ const isAbortError = function (error: unknown): boolean {
 const parseUncompressedSizeFromEtag = function (etag: string | null): number | null {
   if (!etag) return null
 
-  // Регулярное выражение ищет hex-число после опционального W/" и перед дефисом
   const match = etag.match(/^(?:W\/)?"([0-9a-fA-F]+)-/i)
   if (match) {
-    const size = parseInt(match[1], 16)
+    const size = parseInt(match[1]!, 16)
     return Number.isFinite(size) && size > 0 ? size : null
   }
   return null
