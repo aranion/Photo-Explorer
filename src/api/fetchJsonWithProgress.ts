@@ -52,7 +52,7 @@ export const fetchJsonWithProgress = async function <TData>(url: string, options
         onProgress?.({
           receivedBytes,
           totalBytes,
-          percent: toPercent(receivedBytes, totalBytes),
+          percent: toPercent(receivedBytes, totalBytes)
         })
       }
     } finally {

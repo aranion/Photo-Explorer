@@ -2,9 +2,9 @@ import { Button } from '@/app/components/common/Button'
 import { DownloadStatus } from '@/types/download'
 import { DownloadStatusContent } from './DownloadStatusContent'
 import styles from './styles.module.css'
-import type { DownloadPanelProps } from './types'
+import type { DownloadPanelComponent } from './types'
 
-export const DownloadPanel = <TItem,>({ state, onStart, onCancel }: DownloadPanelProps<TItem>) => {
+export const DownloadPanel: DownloadPanelComponent = ({ state, onStart, onCancel }) => {
   const getStartButtonLabel = (status: DownloadStatus): string => {
     switch (status) {
       case DownloadStatus.Idle:
@@ -17,9 +17,7 @@ export const DownloadPanel = <TItem,>({ state, onStart, onCancel }: DownloadPane
       case DownloadStatus.Loading:
         return 'Загрузить данные'
       default: {
-        // Защита от добавления новых статусов в enum
-        const _exhaustiveCheck: never = status
-        return _exhaustiveCheck
+        throw new Error('Нет такого статуса')
       }
     }
   }

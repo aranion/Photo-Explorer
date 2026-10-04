@@ -6,9 +6,9 @@ import { createInitialDownloadState, downloadReducer } from '@/lib/downloadReduc
 import { DownloadActionType } from '@/types/download'
 import { buildPhotosUrl } from './buildPhotosUrl'
 import type { Photo } from '@/types/photo'
-import type { UsePhotoDownloadResult } from './types'
+import type { PhotoDataContextValue } from './types'
 
-export const usePhotoDownload = function (): UsePhotoDownloadResult {
+export const usePhotoDownload = function (): PhotoDataContextValue {
   const [state, dispatch] = useReducer(downloadReducer<Photo[]>, createInitialDownloadState<Photo[]>())
   const abortControllerRef = useRef<AbortController | null>(null)
   const requestIdRef = useRef(0)
@@ -26,8 +26,8 @@ export const usePhotoDownload = function (): UsePhotoDownloadResult {
       progress: {
         receivedBytes: 0,
         totalBytes: ESTIMATED_PHOTOS_RESPONSE_BYTES,
-        percent: 0,
-      },
+        percent: 0
+      }
     })
 
     fetchJsonWithProgress<Photo[]>(buildPhotosUrl(), {
@@ -37,7 +37,7 @@ export const usePhotoDownload = function (): UsePhotoDownloadResult {
         if (requestIdRef.current === requestId) {
           dispatch({ type: DownloadActionType.Progress, progress })
         }
-      },
+      }
     })
       .then((data) => {
         if (requestIdRef.current === requestId) {
@@ -54,7 +54,7 @@ export const usePhotoDownload = function (): UsePhotoDownloadResult {
         }
         dispatch({
           type: DownloadActionType.Failure,
-          error: error instanceof Error ? error : new Error(String(error)),
+          error: error instanceof Error ? error : new Error(String(error))
         })
       })
       .finally(() => {

@@ -38,7 +38,7 @@ export const highlightText = function (text: string, query: string): HighlightSe
     }
     segments.push({
       text: text.slice(matchIndex, matchIndex + normalizedQuery.length),
-      isMatch: true,
+      isMatch: true
     })
     offset = matchIndex + normalizedQuery.length
   }

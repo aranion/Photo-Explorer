@@ -26,7 +26,7 @@ export const downloadReducer = <TData>(state: DownloadState<TData>, action: Down
     case DownloadActionType.Start:
       return {
         status: DownloadStatus.Loading,
-        progress: { receivedBytes: 0, totalBytes: null, percent: null },
+        progress: { receivedBytes: 0, totalBytes: null, percent: null }
       }
     case DownloadActionType.Progress:
       return state.status === DownloadStatus.Loading ? { ...state, progress: action.progress } : state

@@ -3,7 +3,7 @@ export enum DownloadStatus {
   Loading = 'loading',
   Success = 'success',
   Cancelled = 'cancelled',
-  Failure = 'failure',
+  Failure = 'failure'
 }
 
 export enum DownloadActionType {
@@ -12,7 +12,7 @@ export enum DownloadActionType {
   Success = 'success',
   Cancel = 'cancel',
   Failure = 'failure',
-  Reset = 'reset',
+  Reset = 'reset'
 }
 
 export interface DownloadProgress {
@@ -23,15 +23,15 @@ export interface DownloadProgress {
 
 export type DownloadState<TData> =
   | { status: DownloadStatus.Idle }
-  | { status: DownloadStatus.Loading; progress: DownloadProgress }
-  | { status: DownloadStatus.Success; data: TData }
+  | { status: DownloadStatus.Loading, progress: DownloadProgress }
+  | { status: DownloadStatus.Success, data: TData }
   | { status: DownloadStatus.Cancelled }
-  | { status: DownloadStatus.Failure; error: Error }
+  | { status: DownloadStatus.Failure, error: Error }
 
 export type DownloadAction<TData> =
   | { type: DownloadActionType.Start }
-  | { type: DownloadActionType.Progress; progress: DownloadProgress }
-  | { type: DownloadActionType.Success; data: TData }
+  | { type: DownloadActionType.Progress, progress: DownloadProgress }
+  | { type: DownloadActionType.Success, data: TData }
   | { type: DownloadActionType.Cancel }
-  | { type: DownloadActionType.Failure; error: Error }
+  | { type: DownloadActionType.Failure, error: Error }
   | { type: DownloadActionType.Reset }
