@@ -13,13 +13,13 @@ describe('downloadReducer', () => {
     const state = downloadReducer(createInitialDownloadState<string[]>(), { type: DownloadActionType.Start })
     expect(state).toEqual({
       status: DownloadStatus.Loading,
-      progress: { receivedBytes: 0, totalBytes: null, percent: null },
+      progress: { receivedBytes: 0, totalBytes: null, percent: null }
     })
   })
 
   it('обновляет прогресс во время загрузки', () => {
     const loading = downloadReducer(createInitialDownloadState<string[]>(), {
-      type: DownloadActionType.Start,
+      type: DownloadActionType.Start
     })
     const updated = downloadReducer(loading, { type: DownloadActionType.Progress, progress: PROGRESS })
     expect(updated).toEqual({ status: DownloadStatus.Loading, progress: PROGRESS })
@@ -28,14 +28,14 @@ describe('downloadReducer', () => {
   it('игнорирует прогресс вне состояния loading', () => {
     const idle = downloadReducer(createInitialDownloadState<string[]>(), {
       type: DownloadActionType.Progress,
-      progress: PROGRESS,
+      progress: PROGRESS
     })
     expect(idle).toEqual({ status: DownloadStatus.Idle })
   })
 
   it('сохраняет данные по действию success', () => {
     const loading = downloadReducer(createInitialDownloadState<string[]>(), {
-      type: DownloadActionType.Start,
+      type: DownloadActionType.Start
     })
     const success = downloadReducer(loading, { type: DownloadActionType.Success, data: ['a', 'b'] })
     expect(success).toEqual({ status: DownloadStatus.Success, data: ['a', 'b'] })
@@ -43,11 +43,11 @@ describe('downloadReducer', () => {
 
   it('отменяет загрузку только из состояния loading', () => {
     const loading = downloadReducer(createInitialDownloadState<string[]>(), {
-      type: DownloadActionType.Start,
+      type: DownloadActionType.Start
     })
     expect(downloadReducer(loading, { type: DownloadActionType.Cancel })).toEqual({ status: DownloadStatus.Cancelled })
     expect(downloadReducer(createInitialDownloadState<string[]>(), { type: DownloadActionType.Cancel })).toEqual({
-      status: DownloadStatus.Idle,
+      status: DownloadStatus.Idle
     })
   })
 
@@ -55,7 +55,7 @@ describe('downloadReducer', () => {
     const error = new Error('сеть недоступна')
     const failure = downloadReducer(createInitialDownloadState<string[]>(), {
       type: DownloadActionType.Failure,
-      error,
+      error
     })
     expect(failure).toEqual({ status: DownloadStatus.Failure, error })
   })
@@ -63,7 +63,7 @@ describe('downloadReducer', () => {
   it('сбрасывает состояние по действию reset', () => {
     const failure = downloadReducer(createInitialDownloadState<string[]>(), {
       type: DownloadActionType.Failure,
-      error: new Error('ошибка'),
+      error: new Error('ошибка')
     })
     expect(downloadReducer(failure, { type: DownloadActionType.Reset })).toEqual({ status: DownloadStatus.Idle })
   })
