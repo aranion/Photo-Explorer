@@ -30,6 +30,14 @@ export const usePhotoDownload = function(): UsePhotoDownloadResult {
     const requestId = requestIdRef.current + 1
     requestIdRef.current = requestId
     dispatch({ type: 'start' })
+    dispatch({
+      type: 'progress',
+      progress: {
+        receivedBytes: 0,
+        totalBytes: ESTIMATED_PHOTOS_RESPONSE_BYTES,
+        percent: 0
+      }
+    })
 
     fetchJsonWithProgress<Photo[]>(buildPhotosUrl(), {
       signal: controller.signal,

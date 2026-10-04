@@ -4,7 +4,6 @@ import type { ProgressBarProps } from './types'
 export const ProgressBar = function({ percent, label }: ProgressBarProps) {
   const roundedPercent =
     percent === null ? null : Math.min(100, Math.max(0, Math.round(percent)))
-  const widthPercent = roundedPercent ?? 100
 
   return (
     <div
@@ -16,12 +15,11 @@ export const ProgressBar = function({ percent, label }: ProgressBarProps) {
       aria-valuenow={roundedPercent ?? undefined}
       aria-valuetext={roundedPercent === null ? 'Размер неизвестен' : `${roundedPercent}%`}
     >
-      <div
-        className={
-          roundedPercent === null ? `${styles.fill} ${styles.indeterminate}` : styles.fill
-        }
-        style={{ width: `${widthPercent}%` }}
-      />
+      {roundedPercent === null ? (
+        <div className={`${styles.fill} ${styles.indeterminate}`} />
+      ) : (
+        <div className={styles.fill} style={{ width: `${roundedPercent}%` }} />
+      )}
     </div>
   )
 }
